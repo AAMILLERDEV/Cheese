@@ -18,8 +18,8 @@ public class CheddarRepository : ICheddarRepository
     }
 
     public async Task<int> CalcLowest(){
-
-        return 2;
-            
+        return 2;     
     }
+
+    public Task<int?> UpsertCheddar(Cheddar ins) => db.UpsertCheddar(ins);
 }

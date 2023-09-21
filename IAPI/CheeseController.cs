@@ -24,7 +24,7 @@ public class CheeseController : ControllerBase {
 
     } 
 
-       [HttpGet]
+    [HttpGet]
     [Route("[controller]/CalcLowest")]
     public async Task<int> CalcLowest() {
         try {
@@ -34,6 +34,22 @@ public class CheeseController : ControllerBase {
             return 0;
         }
 
-    } 
+    }
+
+    [HttpPost]
+    [Route("[controller]/UpsertCheddar")]
+    public Task<int?> UpsertCheddar(Cheddar ins)
+    {
+        try
+        {
+            return this.ch.UpsertCheddar(ins);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
+
+    }
 }
 

@@ -11,6 +11,7 @@ try {
     builder.Services.AddSwaggerGen();
 
     builder.Services.AddSingleton<ICheddarRepository, CheddarRepository>(x => new CheddarRepository(x.GetRequiredService<IOptionsMonitor<AppSettings>>()));
+
     builder.Services.AddCors(c =>
     {
         c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());

@@ -1,15 +1,10 @@
-using System.Data;
-using System;
-using System.Data.SqlClient;
 using Dapper;
-using System.Runtime.CompilerServices;
-using System.Collections.Generic;
-using System.Configuration;
-using Microsoft.Extensions.Options;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace lib;
 
-class DBRepository 
+public class DBRepository : IDBRepository
 {
     private string connectionString { get; }
 
@@ -23,16 +18,45 @@ class DBRepository
         try
         {
             using IDbConnection connection = new SqlConnection(connectionString);
-
             return await connection.QueryAsync<Cheddar>("hist.cheeses_Get", commandType: CommandType.StoredProcedure);
 
         } catch (Exception ex) {
             return default;
         }
-
-
-
     }
 
-   
+    public async Task<Cheddar> GetCheddars(int id)
+    {
+        try
+        {
+            using IDbConnection connection = new SqlConnection(connectionString);
+            return await connection.QueryFirstOrDefaultAsync<Cheddar>("hist.cheeses_Get", commandType: CommandType.StoredProcedure);
+        }
+        catch (Exception ex)
+        {
+            return default;
+        }
+    }
+
+    public async Task<int?> UpsertCheddar(Cheddar ins)
+    {
+        var parameters = new DynamicParameters(new Dictionary<string, object>
+        {
+            { "@id", ins.ID },
+            { "@name", ins.Name },
+            { "@holes", ins.Holes },
+            { "@density", ins.Density },
+            { "@description", ins.Description },
+        });
+
+        try
+        {
+            using IDbConnection connection = new SqlConnection(connectionString);
+            return await connection.ExecuteAsync("hist.cheeses_Get", parameters, commandType: CommandType.StoredProcedure);
+        }
+        catch (Exception ex)
+        {
+            return default;
+        }
+    }
 }
