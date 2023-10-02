@@ -27,6 +27,8 @@ try {
         app.UseSwaggerUI();
     }
 
+    //comment
+
     app.UseHttpsRedirection();
 
     app.UseAuthorization();
